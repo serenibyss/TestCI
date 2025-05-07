@@ -25,7 +25,7 @@ jobs:
           upstream: ${{ inputs.upstream }}
           auto_close: ${{ inputs.auto_close }}
           script: |
-            ({ github, context, core }) => {
+            async ({ github, context, core }) => {
               const upstream = core.getInput('upstream');
               const commentBody = `Thanks for the PR!
 
