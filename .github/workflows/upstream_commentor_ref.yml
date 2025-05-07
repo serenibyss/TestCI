@@ -7,7 +7,7 @@ on:
         description: 'URL to the upstream repository'
         required: true
         type: string
-      auto-close:
+      auto_close:
         description: 'Whether to close the PR after commenting'
         required: false
         default: false
@@ -22,11 +22,13 @@ jobs:
         uses: actions/github-script@v7
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream: ${{ inputs.upstream }}
+          auto_close: ${{ inputs.auto_close }}
           script: |
-            const repoURL = ${{ inputs.upstream }}
+            const upstream = core.getInput('upstream');
             const commentBody = `Thanks for the PR!
 
-            PRs to this repo should be opened on the upstream repo [here](${repoURL}) instead of the GTNH fork. This can be ignored if there is a good reason to PR to specifically the fork instead.`;
+            PRs to this repo should be opened on the upstream repo [here](${upstream}) instead of the GTNH fork. This can be ignored if there is a good reason to PR to specifically the fork instead.`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -35,7 +37,7 @@ jobs:
               body: commentBody
             });
 
-            if ${{ inputs.auto-close }} {
+            if core.getInput('auto_close') {
               github.rest.issues.update({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
