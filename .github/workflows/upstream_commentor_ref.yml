@@ -25,6 +25,8 @@ jobs:
           upstream: ${{ inputs.upstream }}
           auto_close: ${{ inputs.auto_close }}
           script: |
+            const core = require('@actions/core');
+
             const upstream = core.getInput('upstream');
             const commentBody = `Thanks for the PR!
 
